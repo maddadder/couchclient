@@ -71,6 +71,13 @@ A fully list of nuget packages are referenced below:
 
 Setting up a basic REST API in ASP.NET with Couchbase is fairly simple, this project when run with Couchbase Server 7 installed creates a bucket in Couchbase, an index for our parameterized [N1QL query](https://docs.couchbase.com/dotnet-sdk/current/howtos/n1ql-queries-with-sdk.html), and showcases basic CRUD operations needed in most applications.
 
+# Setup to run locally
+```
+curl -O https://packages.couchbase.com/releases/couchbase-release/couchbase-release-1.0-amd64.deb
+sudo dpkg -i ./couchbase-release-1.0-amd64.deb
+sudo apt-get update
+sudo apt-get install couchbase-server-community
+```
 # deploy to kubernetes
 ```
 cd src/couchclient
