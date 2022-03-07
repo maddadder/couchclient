@@ -44,7 +44,7 @@ namespace couchclient.Controllers
         [SwaggerResponse(200, "Returns a report")]
         [SwaggerResponse(404, "Report not found")]
         [SwaggerResponse(500, "Returns an internal error")]
-        public async Task<IActionResult> GetById([FromRoute] Guid id)
+        public async Task<ActionResult<Profile>> GetById([FromRoute] Guid id)
         {
             try
             {
@@ -151,7 +151,7 @@ namespace couchclient.Controllers
         [SwaggerOperation(OperationId = "UserProfile-List", Summary = "Search for user profiles", Description = "Get a list of user profiles from the request")]
         [SwaggerResponse(200, "Returns the list of user profiles")]
         [SwaggerResponse(500, "Returns an internal error")]
-        public async Task<IActionResult> List([FromQuery] ProfileListRequestQuery request)
+        public async Task<ActionResult<List<Profile>>> List([FromQuery] ProfileListRequestQuery request)
         {
             try
             {
