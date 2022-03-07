@@ -80,6 +80,21 @@ sudo apt-get install couchbase-server-community
 ```
 # deploy to kubernetes
 ```
+# note, this doc assumes you already have a kubernetes cluster configured and kubectl can connect to your cluster
+
+# install helm
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+chmod 700 get_helm.sh
+./get_helm.sh
+
+# configure docker to connect to local registry
+sudo nano /etc/docker/daemon.json
+# add the text
+{
+  "insecure-registries" : ["192.168.1.151:32000"]
+}
+
+# deploy
 cd src/couchclient
 docker-compose build
 docker push 192.168.1.151:32000/couchclient:1.0.15
