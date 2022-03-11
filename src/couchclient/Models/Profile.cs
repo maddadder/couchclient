@@ -4,6 +4,7 @@ namespace couchclient.Models
     public class Profile
     {
         public Guid Pid { get; set; }
+        public string __T {get;set;}
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }

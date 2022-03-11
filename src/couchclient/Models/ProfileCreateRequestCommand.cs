@@ -13,6 +13,7 @@ namespace couchclient.Models
             return new Profile
             {
 		        Pid = new Guid(),
+                __T = "up",
                 FirstName = this.FirstName,
                 LastName = this.LastName,
                 Email = this.Email,

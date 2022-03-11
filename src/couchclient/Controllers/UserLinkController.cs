@@ -16,8 +16,8 @@ using Swashbuckle.AspNetCore.Annotations;
 namespace couchclient.Controllers
 {
     [ApiController]
-    [Route("/api/v1/profile")]
-    public class ProfileController
+    [Route("/api/v1/userlink")]
+    public class UserLinkController
         : Controller
     {
         private readonly IClusterProvider _clusterProvider;
@@ -26,11 +26,11 @@ namespace couchclient.Controllers
 
         private readonly CouchbaseConfig _couchbaseConfig;
 
-        public ProfileController(
+        public UserLinkController(
             IClusterProvider clusterProvider,
             IBucketProvider bucketProvider,
 	        IOptions<CouchbaseConfig> options,
-            ILogger<ProfileController> logger)
+            ILogger<UserLinkController> logger)
         {
 	        _clusterProvider = clusterProvider;
 	        _bucketProvider = bucketProvider;
@@ -39,12 +39,12 @@ namespace couchclient.Controllers
 	        _couchbaseConfig = options.Value;
         }
 
-        [HttpGet("{id:Guid}", Name = "UserProfile-GetById")]
-        [SwaggerOperation(OperationId = "UserProfile-GetById", Summary = "Get user profile by Id", Description = "Get a user profile by Id from the request")]
+        [HttpGet("{id:Guid}", Name = "UserLink-GetById")]
+        [SwaggerOperation(OperationId = "UserLink-GetById", Summary = "Get userlink by Id", Description = "Get a userlink by Id from the request")]
         [SwaggerResponse(200, "Returns a report")]
         [SwaggerResponse(404, "Report not found")]
         [SwaggerResponse(500, "Returns an internal error")]
-        public async Task<ActionResult<Profile>> GetById([FromRoute] Guid id)
+        public async Task<ActionResult<UserLink>> GetById([FromRoute] Guid id)
         {
             try
             {
@@ -52,7 +52,7 @@ namespace couchclient.Controllers
 		        var scope = bucket.Scope(_couchbaseConfig.ScopeName);
                 var collection = scope.Collection(_couchbaseConfig.CollectionName); 
 		        var result = await collection.GetAsync(id.ToString());
-                return Ok(result.ContentAs<Profile>());
+                return Ok(result.ContentAs<UserLink>());
 
             }
 	        catch (DocumentNotFoundException)
@@ -67,23 +67,23 @@ namespace couchclient.Controllers
         }
 
         [HttpPost]
-        [SwaggerOperation(OperationId = "UserProfile-Post", Summary = "Create a user profile", Description = "Create a user profile from the request")]
-        [SwaggerResponse(201, "Create a user profile")]
-        [SwaggerResponse(409, "the email of the user already exists")]
+        [SwaggerOperation(OperationId = "UserLink-Post", Summary = "Create a userlink", Description = "Create a userlink from the request")]
+        [SwaggerResponse(201, "Create a userlink")]
+        [SwaggerResponse(409, "the href of the link already exists")]
         [SwaggerResponse(500, "Returns an internal error")]
-        public async Task<IActionResult> Post([FromBody] ProfileCreateRequestCommand request)
+        public async Task<IActionResult> Post([FromBody] UserLinkCreateRequestCommand request)
         {
             try
             {
-		        if (!string.IsNullOrEmpty(request.Email) && !string.IsNullOrEmpty(request.Password))
+		        if (!string.IsNullOrEmpty(request.Href) && !string.IsNullOrEmpty(request.Content))
 		        {
 		            var bucket = await _bucketProvider.GetBucketAsync(_couchbaseConfig.BucketName);
 		            var collection = bucket.Collection(_couchbaseConfig.CollectionName);
-		            var profile = request.GetProfile();
-                    profile.Pid = Guid.NewGuid();
-		            await collection.InsertAsync(profile.Pid.ToString(), profile);
+		            var userlink = request.GetUserLink();
+                    userlink.Pid = Guid.NewGuid();
+		            await collection.InsertAsync(userlink.Pid.ToString(), userlink);
 
-                    return Created($"/api/v1/profile/{profile.Pid}", profile);
+                    return Created($"/api/v1/userlink/{userlink.Pid}", userlink);
 		        }
 		        else 
 		        {
@@ -99,20 +99,20 @@ namespace couchclient.Controllers
         }
 
         [HttpPut]
-        [SwaggerOperation(OperationId = "UserProfile-Update", Summary = "Update a user profile", Description = "Update a user profile from the request")]
-        [SwaggerResponse(200, "Update a user profile")]
-        [SwaggerResponse(404, "user profile not found")]
+        [SwaggerOperation(OperationId = "UserLink-Update", Summary = "Update a userlink", Description = "Update a userlink from the request")]
+        [SwaggerResponse(200, "Update a userlink")]
+        [SwaggerResponse(404, "userlink not found")]
         [SwaggerResponse(500, "Returns an internal error")]
-        public async Task<IActionResult> Update([FromBody] ProfileUpdateRequestCommand request)
+        public async Task<IActionResult> Update([FromBody] UserLinkUpdateRequestCommand request)
         {
             try
             {
                 var bucket = await _bucketProvider.GetBucketAsync(_couchbaseConfig.BucketName);
                 var collection = bucket.Collection(_couchbaseConfig.CollectionName);
                 var result = await collection.GetAsync(request.Pid.ToString());
-                var profile = result.ContentAs<Profile>();
+                var userlink = result.ContentAs<UserLink>();
 		
-                var updateResult = await collection.ReplaceAsync<Profile>(request.Pid.ToString(), request.GetProfile());
+                var updateResult = await collection.ReplaceAsync<UserLink>(request.Pid.ToString(), request.GetUserLink());
                 return Ok(request);
 
             }
@@ -125,9 +125,9 @@ namespace couchclient.Controllers
 
 
         [HttpDelete("{id:Guid}")]
-        [SwaggerOperation(OperationId = "UserProfile-Delete", Summary = "Delete a profile", Description = "Delete a profile from the request")]
-        [SwaggerResponse(200, "Delete a profile")]
-        [SwaggerResponse(404, "profile not found")]
+        [SwaggerOperation(OperationId = "UserLink-Delete", Summary = "Delete a userlink", Description = "Delete a userlink from the request")]
+        [SwaggerResponse(200, "Delete a userlink")]
+        [SwaggerResponse(404, "userlink not found")]
         [SwaggerResponse(500, "Returns an internal error")]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
@@ -146,19 +146,19 @@ namespace couchclient.Controllers
         }
 
         [HttpGet]
-	    [Route("/api/v1/profiles")]
-        [SwaggerOperation(OperationId = "UserProfile-List", Summary = "Search for user profiles", Description = "Get a list of user profiles from the request")]
-        [SwaggerResponse(200, "Returns the list of user profiles")]
+	    [Route("/api/v1/userlinks")]
+        [SwaggerOperation(OperationId = "UserLink-List", Summary = "Search for userlinks", Description = "Get a list of userlinks from the request")]
+        [SwaggerResponse(200, "Returns the list of userlinks")]
         [SwaggerResponse(500, "Returns an internal error")]
-        public async Task<ActionResult<List<Profile>>> List([FromQuery] ProfileListRequestQuery request)
+        public async Task<ActionResult<List<UserLink>>> List([FromQuery] UserLinkListRequestQuery request)
         {
             try
             {
                 var cluster = await _clusterProvider.GetClusterAsync();
-                var query = $"SELECT p.* FROM  {_couchbaseConfig.BucketName}.{_couchbaseConfig.ScopeName}.{_couchbaseConfig.CollectionName} p WHERE __T == 'up' AND lower(p.firstName) LIKE '%{request.Search.ToLower()}%' OR lower(p.lastName) LIKE '%{request.Search.ToLower()}%' LIMIT {request.Limit} OFFSET {request.Skip}";
-
-                var results = await cluster.QueryAsync<Profile>(query);
-                var items = await results.Rows.ToListAsync<Profile>();
+                var query = $"SELECT p.* FROM `{_couchbaseConfig.BucketName}`.`{_couchbaseConfig.ScopeName}`.`{_couchbaseConfig.CollectionName}` p WHERE __T = 'ul' AND lower(p.href) LIKE '%{request.Search.ToLower()}%' OR lower(p.content) LIKE '%{request.Search.ToLower()}%' LIMIT {request.Limit} OFFSET {request.Skip}";
+                _logger.LogInformation(query);
+                var results = await cluster.QueryAsync<UserLink>(query);
+                var items = await results.Rows.ToListAsync<UserLink>();
                 if (items.Count == 0)
                     return NotFound();
 
