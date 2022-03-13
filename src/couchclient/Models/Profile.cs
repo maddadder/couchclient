@@ -27,6 +27,8 @@ namespace couchclient.Models
             {
                 _password = BCrypt.Net.BCrypt.HashPassword(value);
             }
-         }
+        }
+        public DateTime Created { get;set; }
+        public DateTime Modified { get;set; }
     }
 }

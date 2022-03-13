@@ -81,6 +81,8 @@ namespace couchclient.Controllers
 		            var collection = bucket.Collection(_couchbaseConfig.CollectionName);
 		            var userlink = request.GetUserLink();
                     userlink.Pid = Guid.NewGuid();
+                    userlink.Created = DateTime.UtcNow;
+                    userlink.Modified = DateTime.UtcNow;
 		            await collection.InsertAsync(userlink.Pid.ToString(), userlink);
 
                     return Created($"/api/v1/userlink/{userlink.Pid}", userlink);
@@ -111,8 +113,10 @@ namespace couchclient.Controllers
                 var collection = bucket.Collection(_couchbaseConfig.CollectionName);
                 var result = await collection.GetAsync(request.Pid.ToString());
                 var userlink = result.ContentAs<UserLink>();
-		
-                var updateResult = await collection.ReplaceAsync<UserLink>(request.Pid.ToString(), request.GetUserLink());
+                var userlinkRequest = request.GetUserLink();
+                userlinkRequest.Created = userlink.Created;
+                userlinkRequest.Modified = DateTime.UtcNow;
+                var updateResult = await collection.ReplaceAsync<UserLink>(request.Pid.ToString(), userlinkRequest);
                 return Ok(request);
 
             }
@@ -155,7 +159,7 @@ namespace couchclient.Controllers
             try
             {
                 var cluster = await _clusterProvider.GetClusterAsync();
-                var query = $"SELECT p.* FROM `{_couchbaseConfig.BucketName}`.`{_couchbaseConfig.ScopeName}`.`{_couchbaseConfig.CollectionName}` p WHERE __T = 'ul' AND lower(p.href) LIKE '%{request.Search.ToLower()}%' OR lower(p.content) LIKE '%{request.Search.ToLower()}%' LIMIT {request.Limit} OFFSET {request.Skip}";
+                var query = $"SELECT p.* FROM `{_couchbaseConfig.BucketName}`.`{_couchbaseConfig.ScopeName}`.`{_couchbaseConfig.CollectionName}` p WHERE __T = 'ul' AND lower(p.href) LIKE '%{request.Search.ToLower()}%' OR lower(p.content) LIKE '%{request.Search.ToLower()}%' ORDER BY p.content ASC LIMIT {request.Limit} OFFSET {request.Skip}";
                 _logger.LogInformation(query);
                 var results = await cluster.QueryAsync<UserLink>(query);
                 var items = await results.Rows.ToListAsync<UserLink>();

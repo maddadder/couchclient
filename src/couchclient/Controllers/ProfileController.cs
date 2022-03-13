@@ -81,6 +81,8 @@ namespace couchclient.Controllers
 		            var collection = bucket.Collection(_couchbaseConfig.CollectionName);
 		            var profile = request.GetProfile();
                     profile.Pid = Guid.NewGuid();
+                    profile.Created = DateTime.UtcNow;
+                    profile.Modified = DateTime.UtcNow;
 		            await collection.InsertAsync(profile.Pid.ToString(), profile);
 
                     return Created($"/api/v1/profile/{profile.Pid}", profile);
@@ -111,8 +113,10 @@ namespace couchclient.Controllers
                 var collection = bucket.Collection(_couchbaseConfig.CollectionName);
                 var result = await collection.GetAsync(request.Pid.ToString());
                 var profile = result.ContentAs<Profile>();
-		
-                var updateResult = await collection.ReplaceAsync<Profile>(request.Pid.ToString(), request.GetProfile());
+                var profileRequest = request.GetProfile();
+                profileRequest.Created = profile.Created;
+                profileRequest.Modified = DateTime.UtcNow;
+                var updateResult = await collection.ReplaceAsync<Profile>(request.Pid.ToString(), profileRequest);
                 return Ok(request);
 
             }
@@ -155,7 +159,7 @@ namespace couchclient.Controllers
             try
             {
                 var cluster = await _clusterProvider.GetClusterAsync();
-                var query = $"SELECT p.* FROM  {_couchbaseConfig.BucketName}.{_couchbaseConfig.ScopeName}.{_couchbaseConfig.CollectionName} p WHERE __T == 'up' AND lower(p.firstName) LIKE '%{request.Search.ToLower()}%' OR lower(p.lastName) LIKE '%{request.Search.ToLower()}%' LIMIT {request.Limit} OFFSET {request.Skip}";
+                var query = $"SELECT p.* FROM  {_couchbaseConfig.BucketName}.{_couchbaseConfig.ScopeName}.{_couchbaseConfig.CollectionName} p WHERE __T == 'up' AND lower(p.firstName) LIKE '%{request.Search.ToLower()}%' OR lower(p.lastName) LIKE '%{request.Search.ToLower()}%' ORDER BY p.firstname ASC, p.lastname Asc ASC LIMIT {request.Limit} OFFSET {request.Skip}";
 
                 var results = await cluster.QueryAsync<Profile>(query);
                 var items = await results.Rows.ToListAsync<Profile>();
