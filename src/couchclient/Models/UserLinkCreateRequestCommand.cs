@@ -1,10 +1,16 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
+
 namespace couchclient.Models
 {
     public class UserLinkCreateRequestCommand
     {
+        [Required]
         public string Content { get; set; }
+        [Required]
+        [RegularExpression(StringHelper.RegexUrl)]
         public string Href { get; set; }
+
         public string Target { get; set; }
 
         public UserLink GetUserLink()
