@@ -11,7 +11,7 @@ namespace couchclient.Models
         [Required]
         public string Content { get; set; }
         [Required]
-        [RegularExpression(StringHelper.RegexUrl)]
+        [RegularExpression(StringHelper.RegexUrl, ErrorMessage = "Must be a valid URL")]
         public string Href { get; set; }
         public string Target { get; set; }
 
