@@ -158,9 +158,12 @@ namespace couchclient.Controllers
         {
             try
             {
+                if(string.IsNullOrEmpty(request.Search)){
+                    return BadRequest("Search parameters are empty");
+                }
                 var cluster = await _clusterProvider.GetClusterAsync();
-                var query = $"SELECT p.* FROM  {_couchbaseConfig.BucketName}.{_couchbaseConfig.ScopeName}.{_couchbaseConfig.CollectionName} p WHERE __T == 'up' AND lower(p.firstName) LIKE '%{request.Search.ToLower()}%' OR lower(p.lastName) LIKE '%{request.Search.ToLower()}%' ORDER BY p.firstname ASC, p.lastname Asc ASC LIMIT {request.Limit} OFFSET {request.Skip}";
-
+                var query = $"SELECT p.* FROM `{_couchbaseConfig.BucketName}`.`{_couchbaseConfig.ScopeName}`.`{_couchbaseConfig.CollectionName}` p WHERE __T == 'up' AND lower(p.firstName) LIKE '%{request.Search.ToLower()}%' OR lower(p.lastName) LIKE '%{request.Search.ToLower()}%' ORDER BY p.firstname ASC, p.lastname ASC LIMIT {request.Limit} OFFSET {request.Skip}";
+                _logger.LogInformation(query);
                 var results = await cluster.QueryAsync<Profile>(query);
                 var items = await results.Rows.ToListAsync<Profile>();
                 if (items.Count == 0)

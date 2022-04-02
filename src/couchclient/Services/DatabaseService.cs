@@ -12,6 +12,7 @@ using Couchbase.Query;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using couchclient.Models;
+using System;
 
 namespace couchclient.Services
 {
@@ -85,7 +86,7 @@ namespace couchclient.Services
 						_logger.LogWarning($"HttpRequestExcecption when creating Scope {_couchbaseConfig.ScopeName}");
 					}
 				}
-				/*
+				
 				//try to create collection - if fails it's ok the collection probably exists
 				_logger.LogWarning($"Attempting to create collection with scope:{_couchbaseConfig.ScopeName}, collection:{_couchbaseConfig.CollectionName} in bucket:{_couchbaseConfig.BucketName}.");
 				try 
@@ -99,34 +100,38 @@ namespace couchclient.Services
 				catch (HttpRequestException)
 				{
 					_logger.LogWarning($"HttpRequestExcecption when creating collection  {_couchbaseConfig.CollectionName}");
-				}*/
+				}
+				catch(Exception)
+				{
+					_logger.LogWarning($"Exception when creating collection  {_couchbaseConfig.CollectionName}");
+				}
 
 				//try to create index - if fails it probably already exists
-				
-					await Task.Delay(5000);
-					var queries = new List<string> 
-					{ 
-						$"CREATE PRIMARY INDEX default_profile_index ON {_couchbaseConfig.BucketName}.{_couchbaseConfig.ScopeName}.{_couchbaseConfig.CollectionName}",
-						$"CREATE Primary INDEX on {_couchbaseConfig.BucketName}",
-						$"CREATE INDEX adv_T ON `{_couchbaseConfig.BucketName}`:`{_couchbaseConfig.BucketName}`.`{_couchbaseConfig.ScopeName}`.`{_couchbaseConfig.CollectionName}`(`__T`)"
-					};
-					foreach (var query in queries)
+			
+				await Task.Delay(5000);
+				var queries = new List<string> 
+				{ 
+					$"CREATE PRIMARY INDEX default_profile_index ON {_couchbaseConfig.BucketName}.{_couchbaseConfig.ScopeName}.{_couchbaseConfig.CollectionName}",
+					$"CREATE Primary INDEX on {_couchbaseConfig.BucketName}",
+					$"CREATE INDEX adv_T ON `{_couchbaseConfig.BucketName}`:`{_couchbaseConfig.BucketName}`.`{_couchbaseConfig.ScopeName}`.`{_couchbaseConfig.CollectionName}`(`__T`)"
+				};
+				foreach (var query in queries)
+				{
+					try
 					{
-						try
-						{
-							_logger.LogWarning($"executing query {query}.");
-							var result = await cluster.QueryAsync<dynamic>(query);
-							_logger.LogWarning($"Created index {query} with status {result.MetaData.Status}");
-						}
-						catch (IndexExistsException)
-						{
-							_logger.LogWarning($"Collection {_couchbaseConfig.CollectionName} already exists in {_couchbaseConfig.BucketName}, {query}");
-						}
-						catch (System.Exception)
-						{
-							_logger.LogWarning($"failed to run query: {query}");
-						}
+						_logger.LogWarning($"executing query {query}.");
+						var result = await cluster.QueryAsync<dynamic>(query);
+						_logger.LogWarning($"Created index {query} with status {result.MetaData.Status}");
 					}
+					catch (IndexExistsException)
+					{
+						_logger.LogWarning($"Collection {_couchbaseConfig.CollectionName} already exists in {_couchbaseConfig.BucketName}, {query}");
+					}
+					catch (System.Exception)
+					{
+						_logger.LogWarning($"failed to run query: {query}");
+					}
+				}
 				
 			}
 			else 
