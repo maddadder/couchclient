@@ -111,9 +111,9 @@ namespace couchclient.Services
 				await Task.Delay(5000);
 				var queries = new List<string> 
 				{ 
-					$"CREATE PRIMARY INDEX default_profile_index ON {_couchbaseConfig.BucketName}.{_couchbaseConfig.ScopeName}.{_couchbaseConfig.CollectionName}",
-					$"CREATE Primary INDEX on {_couchbaseConfig.BucketName}",
-					$"CREATE INDEX adv_T ON `{_couchbaseConfig.BucketName}`:`{_couchbaseConfig.BucketName}`.`{_couchbaseConfig.ScopeName}`.`{_couchbaseConfig.CollectionName}`(`__T`)"
+					$"CREATE PRIMARY INDEX default_profile_index ON {_couchbaseConfig.BucketName}.{_couchbaseConfig.ScopeName}.{_couchbaseConfig.CollectionName} USING GSI WITH {{\"num_replica\": 2}}",
+					$"CREATE Primary INDEX on {_couchbaseConfig.BucketName} USING GSI WITH {{\"num_replica\": 2}}",
+					$"CREATE INDEX adv_T ON `{_couchbaseConfig.BucketName}`:`{_couchbaseConfig.BucketName}`.`{_couchbaseConfig.ScopeName}`.`{_couchbaseConfig.CollectionName}`(`__T`) USING GSI WITH {{\"num_replica\": 2}}",
 				};
 				foreach (var query in queries)
 				{
