@@ -7,6 +7,7 @@ namespace couchclient.Models
     {
         [Required]
         public Guid Pid { get; set; }
+        [Required]
         public string __T {get;set;}
         [Required]
         public string FirstName { get; set; }

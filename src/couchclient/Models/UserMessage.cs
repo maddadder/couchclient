@@ -3,18 +3,20 @@ using System.ComponentModel.DataAnnotations;
 
 namespace couchclient.Models
 {
-    public class UserLink
+    public class UserMessage
     {
         [Required]
         public Guid Pid { get; set; }
         [Required]
         public string __T {get;set;}
         [Required]
-        public string Content { get; set; }
+        public string Body { get; set; }
         [Required]
-        [RegularExpression(StringHelper.RegexUrl, ErrorMessage = "Must be a valid URL")]
-        public string Href { get; set; }
-        public string Target { get; set; }
+        public string To { get; set; }
+        [Required]
+        public string From { get; set; }
+        [Required]
+        public string ApiVersion { get; set; }
         public DateTime Created { get;set; }
         public DateTime Modified { get;set; }
 
