@@ -67,11 +67,46 @@ namespace couchclient.Controllers
         }
 
         [HttpPost]
-        [SwaggerOperation(OperationId = "UserMessage-Post", Summary = "Create a usermessage", Description = "Create a usermessage from the request")]
+        [SwaggerOperation(OperationId = "UserMesssage-Post", Summary = "Create a usermessage", Description = "Create a usermessage from the request")]
         [SwaggerResponse(201, "Create a usermessage")]
         [SwaggerResponse(409, "the href of the link already exists")]
         [SwaggerResponse(500, "Returns an internal error")]
-        public async Task<IActionResult> Post([FromForm] UserMessageCreateRequestCommand request)
+        public async Task<IActionResult> Post([FromBody] UserMessageCreateRequestCommand request)
+        {
+            try
+            {
+		        if (!string.IsNullOrEmpty(request.To) && !string.IsNullOrEmpty(request.From) && !string.IsNullOrEmpty(request.Body) && !string.IsNullOrEmpty(request.ApiVersion))
+		        {
+		            var bucket = await _bucketProvider.GetBucketAsync(_couchbaseConfig.BucketName);
+		            var collection = bucket.Collection(_couchbaseConfig.CollectionName);
+		            var usermessage = request.GetUserMessage();
+                    usermessage.Pid = Guid.NewGuid();
+                    usermessage.Created = DateTime.UtcNow;
+                    usermessage.Modified = DateTime.UtcNow;
+		            await collection.InsertAsync(usermessage.Pid.ToString(), usermessage);
+
+                    return Created($"/api/v1/usermessage/{usermessage.Pid}", usermessage);
+		        }
+		        else 
+		        {
+		           return UnprocessableEntity();  
+		        }
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error: {ex.Message} {ex.StackTrace} {Request.GetDisplayUrl()}");
+            }
+        }
+
+        [Route("twilio")]
+        [HttpPost]
+        [SwaggerOperation(OperationId = "UserMessage-Post-Twilio", Summary = "Create a usermessage", Description = "Create a usermessage from the request")]
+        [SwaggerResponse(201, "Create a usermessage")]
+        [SwaggerResponse(409, "the href of the link already exists")]
+        [SwaggerResponse(500, "Returns an internal error")]
+        public async Task<IActionResult> Post([FromForm] UserMessageCreateRequestCommandTwilio request)
         {
             try
             {
@@ -159,7 +194,7 @@ namespace couchclient.Controllers
             try
             {
                 var cluster = await _clusterProvider.GetClusterAsync();
-                var query = $"SELECT p.* FROM `{_couchbaseConfig.BucketName}`.`{_couchbaseConfig.ScopeName}`.`{_couchbaseConfig.CollectionName}` p WHERE __T = 'um' AND lower(p.apiversion) LIKE '%{request.Search.ToLower()}%' ORDER BY p.modifiedby ASC LIMIT {request.Limit} OFFSET {request.Skip}";
+                var query = $"SELECT p.* FROM `{_couchbaseConfig.BucketName}`.`{_couchbaseConfig.ScopeName}`.`{_couchbaseConfig.CollectionName}` p WHERE __T = 'um' AND p.apiVersion == '{request.Search.ToLower()}' ORDER BY p.modified ASC LIMIT {request.Limit} OFFSET {request.Skip}";
                 _logger.LogInformation(query);
                 var results = await cluster.QueryAsync<UserMessage>(query);
                 var items = await results.Rows.ToListAsync<UserMessage>();
