@@ -84,8 +84,8 @@ namespace couchclient.Controllers
                     usermessage.Created = DateTime.UtcNow;
                     usermessage.Modified = DateTime.UtcNow;
 		            await collection.InsertAsync(usermessage.Pid.ToString(), usermessage);
-
-                    return Created($"/api/v1/usermessage/{usermessage.Pid}", usermessage);
+                    return Ok();
+                    //return Created($"/api/v1/usermessage/{usermessage.Pid}", usermessage);
 		        }
 		        else 
 		        {
