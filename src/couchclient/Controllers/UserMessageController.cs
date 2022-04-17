@@ -16,7 +16,7 @@ using Swashbuckle.AspNetCore.Annotations;
 namespace couchclient.Controllers
 {
     [ApiController]
-    [Route("/api/v1/usermessage")]
+    [Route("/api/v1/UserMessage")]
     public class UserMessageController
         : Controller
     {
@@ -39,7 +39,7 @@ namespace couchclient.Controllers
 	        _couchbaseConfig = options.Value;
         }
 
-        [HttpGet("{id:Guid}", Name = "UserMessage-GetById")]
+        [HttpGet("GetById/{id:Guid}", Name = "UserMessage-GetById")]
         [SwaggerOperation(OperationId = "UserMessage-GetById", Summary = "Get usermessage by Id", Description = "Get a usermessage by Id from the request")]
         [SwaggerResponse(200, "Returns a report")]
         [SwaggerResponse(404, "Report not found")]
@@ -84,8 +84,7 @@ namespace couchclient.Controllers
                     usermessage.Created = DateTime.UtcNow;
                     usermessage.Modified = DateTime.UtcNow;
 		            await collection.InsertAsync(usermessage.Pid.ToString(), usermessage);
-
-                    return Created($"/api/v1/usermessage/{usermessage.Pid}", usermessage);
+                    return Created($"/api/v1/UserMessage/{usermessage.Pid}", usermessage);
 		        }
 		        else 
 		        {
@@ -135,7 +134,7 @@ namespace couchclient.Controllers
             }
         }
 
-        [HttpPut]
+        [HttpPut("Update/{id:Guid}")]
         [SwaggerOperation(OperationId = "UserMessage-Update", Summary = "Update a usermessage", Description = "Update a usermessage from the request")]
         [SwaggerResponse(200, "Update a usermessage")]
         [SwaggerResponse(404, "usermessage not found")]
@@ -163,7 +162,7 @@ namespace couchclient.Controllers
         }
 
 
-        [HttpDelete("{id:Guid}")]
+        [HttpDelete("Delete/{id:Guid}")]
         [SwaggerOperation(OperationId = "UserMessage-Delete", Summary = "Delete a usermessage", Description = "Delete a usermessage from the request")]
         [SwaggerResponse(200, "Delete a usermessage")]
         [SwaggerResponse(404, "usermessage not found")]
@@ -185,7 +184,7 @@ namespace couchclient.Controllers
         }
 
         [HttpGet]
-	    [Route("/api/v1/usermessages")]
+	    [Route("List")]
         [SwaggerOperation(OperationId = "UserMessage-List", Summary = "Search for usermessages", Description = "Get a list of usermessages from the request")]
         [SwaggerResponse(200, "Returns the list of usermessages")]
         [SwaggerResponse(500, "Returns an internal error")]

@@ -3,8 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace couchclient.Models
 {
-    public class ProfileCreateRequestCommand
+    public class UserProfileUpdateRequestCommand
     {
+        [Required]
+        public Guid Pid { get; set;  }
         [Required]
         public string FirstName { get; set; }
         [Required]
@@ -14,18 +16,17 @@ namespace couchclient.Models
         public string Email { get; set; }
         [Required]
         public string Password { get; set; }
-
-        public Profile GetProfile()
-        {
-            return new Profile
+	    public UserProfile GetProfile()
+	    {
+	        return new UserProfile
             {
-		        Pid = new Guid(),
+                Pid = this.Pid,
                 __T = "up",
-                FirstName = this.FirstName,
-                LastName = this.LastName,
-                Email = this.Email,
-                Password = this.Password
+		        FirstName = this.FirstName,
+		        LastName = this.LastName,
+		        Email = this.Email,
+	            Password = this.Password
             };
-        }
+	    } 
     }
 }

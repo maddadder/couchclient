@@ -25,9 +25,9 @@ dotnet restore
 
 The Couchbase SDK for .NET includes a nuget package called `Couchbase.Extensions.DependencyInjection` which is designed for environments like ASP.NET that takes in a configuration to connect to Couchbase and automatically registers interfaces that you can use in your code to perform full `CRUD (create, read, update, delete)` operations and queries against the database. 
 
-### Completed version of the ProfileController
+### Completed version of the UserProfileController
 
-We provide a completed version of the Controller that this guide will walk you through in the Controller folder called `ProfileController1.cs`.  This version is used for our integration tests and you can use it to check your work that you do on the ProfileController.cs file.
+We provide a completed version of the Controller that this guide will walk you through in the Controller folder called `ProfileController1.cs`.  This version is used for our integration tests and you can use it to check your work that you do on the UserProfileController.cs file.
 
 ### Database Server Configuration
 
@@ -97,7 +97,7 @@ sudo nano /etc/docker/daemon.json
 # deploy
 cd src/couchclient
 docker-compose build
-docker push 192.168.1.151:32000/couchclient:1.0.67
+docker push 192.168.1.151:32000/couchclient:1.0.71
 cd ../../
 helm upgrade couchclient ./couchclient
 ```

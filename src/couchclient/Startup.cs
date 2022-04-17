@@ -71,6 +71,7 @@ namespace couchclient
 		            Title = "Couchbase Quickstart API", 
 		            Version = "v1" 
 		        });
+                c.EnableAnnotations();
             });
         }
 

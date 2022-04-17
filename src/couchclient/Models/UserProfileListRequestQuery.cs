@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace couchclient.Models
 {
-    public class ProfileListRequestQuery
+    public class UserProfileListRequestQuery
     {
         [Required]
         public string Search { get; set; }

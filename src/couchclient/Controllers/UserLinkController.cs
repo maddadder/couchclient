@@ -16,7 +16,7 @@ using Swashbuckle.AspNetCore.Annotations;
 namespace couchclient.Controllers
 {
     [ApiController]
-    [Route("/api/v1/userlink")]
+    [Route("/api/v1/UserLink")]
     public class UserLinkController
         : Controller
     {
@@ -39,7 +39,7 @@ namespace couchclient.Controllers
 	        _couchbaseConfig = options.Value;
         }
 
-        [HttpGet("{id:Guid}", Name = "UserLink-GetById")]
+        [HttpGet("GetById/{id:Guid}", Name = "UserLink-GetById")]
         [SwaggerOperation(OperationId = "UserLink-GetById", Summary = "Get userlink by Id", Description = "Get a userlink by Id from the request")]
         [SwaggerResponse(200, "Returns a report")]
         [SwaggerResponse(404, "Report not found")]
@@ -85,7 +85,7 @@ namespace couchclient.Controllers
                     userlink.Modified = DateTime.UtcNow;
 		            await collection.InsertAsync(userlink.Pid.ToString(), userlink);
 
-                    return Created($"/api/v1/userlink/{userlink.Pid}", userlink);
+                    return Created($"/api/v1/UserLink/{userlink.Pid}", userlink);
 		        }
 		        else 
 		        {
@@ -100,7 +100,7 @@ namespace couchclient.Controllers
             }
         }
 
-        [HttpPut]
+        [HttpPut("Update/{id:Guid}")]
         [SwaggerOperation(OperationId = "UserLink-Update", Summary = "Update a userlink", Description = "Update a userlink from the request")]
         [SwaggerResponse(200, "Update a userlink")]
         [SwaggerResponse(404, "userlink not found")]
@@ -128,7 +128,7 @@ namespace couchclient.Controllers
         }
 
 
-        [HttpDelete("{id:Guid}")]
+        [HttpDelete("Delete/{id:Guid}")]
         [SwaggerOperation(OperationId = "UserLink-Delete", Summary = "Delete a userlink", Description = "Delete a userlink from the request")]
         [SwaggerResponse(200, "Delete a userlink")]
         [SwaggerResponse(404, "userlink not found")]
@@ -150,7 +150,7 @@ namespace couchclient.Controllers
         }
 
         [HttpGet]
-	    [Route("/api/v1/userlinks")]
+	    [Route("List")]
         [SwaggerOperation(OperationId = "UserLink-List", Summary = "Search for userlinks", Description = "Get a list of userlinks from the request")]
         [SwaggerResponse(200, "Returns the list of userlinks")]
         [SwaggerResponse(500, "Returns an internal error")]
