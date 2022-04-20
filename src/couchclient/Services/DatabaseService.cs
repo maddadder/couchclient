@@ -112,10 +112,13 @@ namespace couchclient.Services
 				var queries = new List<string> 
 				{ 
 					$"CREATE PRIMARY INDEX default_profile_index ON {_couchbaseConfig.BucketName}.{_couchbaseConfig.ScopeName}.{_couchbaseConfig.CollectionName} USING GSI WITH {{\"num_replica\": 2}}",
-					$"CREATE Primary INDEX on {_couchbaseConfig.BucketName} USING GSI WITH {{\"num_replica\": 2}}",
-					$"CREATE INDEX adv_T ON `{_couchbaseConfig.BucketName}`:`{_couchbaseConfig.BucketName}`.`{_couchbaseConfig.ScopeName}`.`{_couchbaseConfig.CollectionName}`(`__T`) USING GSI WITH {{\"num_replica\": 2}}",
+					$"CREATE Primary INDEX ON {_couchbaseConfig.BucketName} USING GSI WITH {{\"num_replica\": 2}}",
+					$"CREATE INDEX adv_T                 ON `{_couchbaseConfig.BucketName}`:`{_couchbaseConfig.BucketName}`.`{_couchbaseConfig.ScopeName}`.`{_couchbaseConfig.CollectionName}`(`__T`) USING GSI WITH {{\"num_replica\": 2}}",
 					$"CREATE INDEX adv_lower_firstName_T ON `{_couchbaseConfig.BucketName}`:`{_couchbaseConfig.BucketName}`.`{_couchbaseConfig.ScopeName}`.`{_couchbaseConfig.CollectionName}`(lower(`firstName`)) WHERE `__T` = 'up' USING GSI WITH {{\"num_replica\": 2}}",
 					$"CREATE INDEX adv_lower_lastName    ON `{_couchbaseConfig.BucketName}`:`{_couchbaseConfig.BucketName}`.`{_couchbaseConfig.ScopeName}`.`{_couchbaseConfig.CollectionName}`(lower(`lastName`))  WHERE `__T` = 'up' USING GSI WITH {{\"num_replica\": 2}}",
+					$"CREATE INDEX adv_apiVersion_T      ON `{_couchbaseConfig.BucketName}`:`{_couchbaseConfig.BucketName}`.`{_couchbaseConfig.ScopeName}`.`{_couchbaseConfig.CollectionName}`(`apiVersion`,`__T`) USING GSI WITH {{\"num_replica\": 2}}",
+					$"CREATE INDEX adv_lower_href_T      ON `{_couchbaseConfig.BucketName}`:`{_couchbaseConfig.BucketName}`.`{_couchbaseConfig.ScopeName}`.`{_couchbaseConfig.CollectionName}`(lower(`href`)) WHERE `__T` = 'ul' USING GSI WITH {{\"num_replica\": 2}}",
+					$"CREATE INDEX adv_lower_content     ON `{_couchbaseConfig.BucketName}`:`{_couchbaseConfig.BucketName}`.`{_couchbaseConfig.ScopeName}`.`{_couchbaseConfig.CollectionName}`(lower(`content`)) USING GSI WITH {{\"num_replica\": 2}}",
 				};
 				foreach (var query in queries)
 				{
