@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using couchclient.Models;
 using Swashbuckle.AspNetCore.Annotations;
+using Microsoft.AspNetCore.Authorization;
 
 namespace couchclient.Controllers
 {
@@ -44,6 +45,7 @@ namespace couchclient.Controllers
         [SwaggerResponse(200, "Returns a report")]
         [SwaggerResponse(404, "Report not found")]
         [SwaggerResponse(500, "Returns an internal error")]
+        [Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<UserMessage>> GetById([FromRoute] Guid id)
         {
             try
@@ -71,6 +73,7 @@ namespace couchclient.Controllers
         [SwaggerResponse(201, "Create a usermessage")]
         [SwaggerResponse(409, "the href of the link already exists")]
         [SwaggerResponse(500, "Returns an internal error")]
+        [Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Post([FromBody] UserMessageCreateRequestCommand request)
         {
             try
@@ -139,6 +142,7 @@ namespace couchclient.Controllers
         [SwaggerResponse(200, "Update a usermessage")]
         [SwaggerResponse(404, "usermessage not found")]
         [SwaggerResponse(500, "Returns an internal error")]
+        [Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Update([FromBody] UserMessageUpdateRequestCommand request)
         {
             try
@@ -167,6 +171,7 @@ namespace couchclient.Controllers
         [SwaggerResponse(200, "Delete a usermessage")]
         [SwaggerResponse(404, "usermessage not found")]
         [SwaggerResponse(500, "Returns an internal error")]
+        [Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
             try
@@ -188,6 +193,7 @@ namespace couchclient.Controllers
         [SwaggerOperation(OperationId = "UserMessage-List", Summary = "Search for usermessages", Description = "Get a list of usermessages from the request")]
         [SwaggerResponse(200, "Returns the list of usermessages")]
         [SwaggerResponse(500, "Returns an internal error")]
+        [Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<List<UserMessage>>> List([FromQuery] UserMessageListRequestQuery request)
         {
             try
