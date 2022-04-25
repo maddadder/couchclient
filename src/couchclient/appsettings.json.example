@@ -15,5 +15,15 @@
     "RestEndpoint": "http://my-couchbase:8091/",
     "Username": "Administrator",
     "Password": "password"
+  },
+  "JsonWebTokenKeys": {
+    "ValidateIssuerSigningKey": true,
+    "IssuerSigningKey": "64A63153-11C1-4919-9133-EFAF99A9B456",
+    "ValidateIssuer": true,
+    "ValidIssuer": "https://localhost:7168",
+    "ValidateAudience": true,
+    "ValidAudience": "https://localhost:7168",
+    "RequireExpirationTime": true,
+    "ValidateLifetime": true
   }
 }

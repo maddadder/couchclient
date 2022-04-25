@@ -14,6 +14,10 @@
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.1.4" />
     <PackageReference Include="CouchbaseNetClient" Version="3.2.5" />
     <PackageReference Include="Couchbase.Extensions.DependencyInjection" Version="3.2.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.4" />
+    <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="6.17.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.17.0" />
+    <PackageReference Include="Macross.Json.Extensions" Version="2.2.0" />
   </ItemGroup>
 
   <ItemGroup>

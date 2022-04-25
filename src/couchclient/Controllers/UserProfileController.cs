@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using couchclient.Models;
 using Swashbuckle.AspNetCore.Annotations;
+using Microsoft.AspNetCore.Authorization;
 
 namespace couchclient.Controllers
 {
@@ -44,6 +45,7 @@ namespace couchclient.Controllers
         [SwaggerResponse(200, "Returns a report")]
         [SwaggerResponse(404, "Report not found")]
         [SwaggerResponse(500, "Returns an internal error")]
+        [Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<UserProfile>> GetById([FromRoute] Guid id)
         {
             try
@@ -71,6 +73,7 @@ namespace couchclient.Controllers
         [SwaggerResponse(201, "Create a user profile")]
         [SwaggerResponse(409, "the email of the user already exists")]
         [SwaggerResponse(500, "Returns an internal error")]
+        [Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Post([FromBody] UserProfileCreateRequestCommand request)
         {
             try
@@ -104,6 +107,7 @@ namespace couchclient.Controllers
         [SwaggerResponse(200, "Update a user profile")]
         [SwaggerResponse(404, "user profile not found")]
         [SwaggerResponse(500, "Returns an internal error")]
+        [Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Update([FromBody] UserProfileUpdateRequestCommand request)
         {
             try
@@ -132,6 +136,7 @@ namespace couchclient.Controllers
         [SwaggerResponse(200, "Delete a profile")]
         [SwaggerResponse(404, "profile not found")]
         [SwaggerResponse(500, "Returns an internal error")]
+        [Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
             try
@@ -153,6 +158,7 @@ namespace couchclient.Controllers
         [SwaggerOperation(OperationId = "UserProfile-List", Summary = "Search for user profiles", Description = "Get a list of user profiles from the request")]
         [SwaggerResponse(200, "Returns the list of user profiles")]
         [SwaggerResponse(500, "Returns an internal error")]
+        [Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<List<UserProfile>>> List([FromQuery] UserProfileListRequestQuery request)
         {
             try

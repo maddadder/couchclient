@@ -41,8 +41,8 @@ namespace couchclient.Controllers
 
         [HttpGet("GetById/{id:Guid}", Name = "UserLink-GetById")]
         [SwaggerOperation(OperationId = "UserLink-GetById", Summary = "Get userlink by Id", Description = "Get a userlink by Id from the request")]
-        [SwaggerResponse(200, "Returns a report")]
-        [SwaggerResponse(404, "Report not found")]
+        [SwaggerResponse(200, "Returns a UserLink")]
+        [SwaggerResponse(404, "UserLink not found")]
         [SwaggerResponse(500, "Returns an internal error")]
         public async Task<ActionResult<UserLink>> GetById([FromRoute] Guid id)
         {
