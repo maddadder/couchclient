@@ -26,7 +26,7 @@ namespace couchclient.Extensions {
                         ValidateAudience = bindJwtSettings.ValidateAudience,
                         ValidAudience = bindJwtSettings.ValidAudience,
                         RequireExpirationTime = bindJwtSettings.RequireExpirationTime,
-                        ValidateLifetime = bindJwtSettings.RequireExpirationTime,
+                        ValidateLifetime = bindJwtSettings.ValidateLifetime,
                         ClockSkew = TimeSpan.FromDays(1),
                 };
             });
