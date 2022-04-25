@@ -37,13 +37,13 @@ namespace couchclient.Controllers
             this.jwtSettings = jwtSettings;
         }
 
-        private async Task<IEnumerable<UserProfile>> GetAllUsers()
+        private async Task<IEnumerable<HashedUserProfile>> GetAllUsers()
         {
             var cluster = await _clusterProvider.GetClusterAsync();
             var query = $"SELECT p.* FROM `{_couchbaseConfig.BucketName}`.`{_couchbaseConfig.ScopeName}`.`{_couchbaseConfig.CollectionName}` p WHERE __T == 'up'";
             _logger.LogInformation(query);
-            var results = await cluster.QueryAsync<UserProfile>(query);
-            var items = await results.Rows.ToListAsync<UserProfile>();
+            var results = await cluster.QueryAsync<HashedUserProfile>(query);
+            var items = await results.Rows.ToListAsync<HashedUserProfile>();
             return items;
         }
             
@@ -55,9 +55,11 @@ namespace couchclient.Controllers
         public async Task<ActionResult<UserToken>> Post([FromBody] UserLogin userLogin) {
             var Token = new UserToken();
             var users = await GetAllUsers();
-            var Valid = users.Any(x => x.Email.Equals(userLogin.Email, StringComparison.OrdinalIgnoreCase));
-            if (Valid) {
-                var user = users.FirstOrDefault(x => x.Email.Equals(userLogin.Email, StringComparison.OrdinalIgnoreCase));
+            var user = users.FirstOrDefault(x => 
+                                x.Email.Equals(userLogin.Email, StringComparison.OrdinalIgnoreCase) && 
+                                BCrypt.Net.BCrypt.Verify(userLogin.Password, x.Password));
+            if (user != null) 
+            {
                 Token = Extensions.JwtHelpers.GenTokenkey(new UserToken() {
                     Email = user.Email,
                     GuidId = Guid.NewGuid(),
@@ -65,7 +67,7 @@ namespace couchclient.Controllers
                 }, jwtSettings);
             } else 
             {
-                return BadRequest($"wrong password");
+                return BadRequest($"Invalid Credentials");
             }
             return Created($"/api/v1/Account/{Token.GuidId}", Token);
         }
