@@ -14,6 +14,7 @@ namespace couchclient.Models
         public string Href { get; set; }
         [RegularExpression(StringHelper.RegexUrl, ErrorMessage = "Must be a valid URL")]
         public string ImgHref { get; set; }
+        public string Category { get; set; }
         public string Target { get; set; }
 
 	    public UserLink GetUserLink()
@@ -25,6 +26,7 @@ namespace couchclient.Models
 		        Content = this.Content,
 		        Href = this.Href,
                 ImgHref = this.ImgHref,
+                Category = this.Category,
 		        Target = this.Target
             };
 	    } 
