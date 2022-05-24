@@ -16,8 +16,8 @@ namespace Org.Quickstart.IntegrationTests.ControllerTests
         : IClassFixture<CustomWebApplicationFactory<Startup>>
     {
         private readonly HttpClient _client;
-		private readonly string baseHostname = "/api/v1/profile";
-		private readonly string baseHostnameSearch = "/api/v1/profiles";
+		private readonly string baseHostname = "/api/v1/UserProfile";
+		private readonly string baseHostnameSearch = "/api/v1/UserProfile";
 
         public ProfileTests(CustomWebApplicationFactory<Startup> factory)
         {
@@ -35,7 +35,7 @@ namespace Org.Quickstart.IntegrationTests.ControllerTests
 
 	        Assert.Equal(HttpStatusCode.Created, response.StatusCode);
 	        var jsonResults = await response.Content.ReadAsStringAsync();
-	        var newUserResult = JsonConvert.DeserializeObject<Profile>(jsonResults);
+	        var newUserResult = JsonConvert.DeserializeObject<UserProfile>(jsonResults);
             
 	        //validate creation 
 	        Assert.Equal(userProfile.FirstName, newUserResult.FirstName);  
@@ -57,7 +57,7 @@ namespace Org.Quickstart.IntegrationTests.ControllerTests
             var response = await _client.PostAsync(baseHostname, content);
 
             var jsonResults = await response.Content.ReadAsStringAsync();
-            var newUserResult = JsonConvert.DeserializeObject<Profile>(jsonResults);
+            var newUserResult = JsonConvert.DeserializeObject<UserProfile>(jsonResults);
             
 	        //update user
 	        UpdateProfile(newUserResult);            
@@ -68,7 +68,7 @@ namespace Org.Quickstart.IntegrationTests.ControllerTests
             
 	        Assert.Equal(HttpStatusCode.OK, updateResponse.StatusCode);
 	        var jsonResult = await updateResponse.Content.ReadAsStringAsync();    
-            var updateUserResult = JsonConvert.DeserializeObject<Profile>(updateUserJson);
+            var updateUserResult = JsonConvert.DeserializeObject<UserProfile>(updateUserJson);
 
 	        //validate update worked
 	        Assert.Equal(newUserResult.Email, updateUserResult.Email);
@@ -92,13 +92,13 @@ namespace Org.Quickstart.IntegrationTests.ControllerTests
 
 			Assert.Equal(HttpStatusCode.Created, response.StatusCode);
 			var jsonResults = await response.Content.ReadAsStringAsync();
-			var newUserResult = JsonConvert.DeserializeObject<Profile>(jsonResults);
+			var newUserResult = JsonConvert.DeserializeObject<UserProfile>(jsonResults);
 			
 			//get the user from the main API
 			var getResponse = await _client.GetAsync($"{baseHostname}/{newUserResult.Pid}"); 
 			Assert.Equal(HttpStatusCode.OK, getResponse.StatusCode);
 			var getJsonResult = await getResponse.Content.ReadAsStringAsync();
-			var getUserResult = JsonConvert.DeserializeObject<Profile>(getJsonResult);
+			var getUserResult = JsonConvert.DeserializeObject<UserProfile>(getJsonResult);
 
 			//validate it got the same user
 			Assert.Equal(newUserResult.Email, getUserResult.Email);
@@ -121,13 +121,13 @@ namespace Org.Quickstart.IntegrationTests.ControllerTests
 
 			Assert.Equal(HttpStatusCode.Created, response.StatusCode);
 			var jsonResults = await response.Content.ReadAsStringAsync();
-			var newUserResult = JsonConvert.DeserializeObject<Profile>(jsonResults);
+			var newUserResult = JsonConvert.DeserializeObject<UserProfile>(jsonResults);
 
 			//get the user from the main API
 			var getResponse = await _client.GetAsync($"{baseHostnameSearch}?Search={userProfile.FirstName}&Skip=0&Limit=5");
 			Assert.Equal(HttpStatusCode.OK, getResponse.StatusCode);
 			var getJsonResult = await getResponse.Content.ReadAsStringAsync();
-			var getUserResult = JsonConvert.DeserializeObject<List<Profile>>(getJsonResult);
+			var getUserResult = JsonConvert.DeserializeObject<List<UserProfile>>(getJsonResult);
 
 			//validate it got the same user
 			Assert.Equal(newUserResult.Email, getUserResult[0].Email);
@@ -139,9 +139,9 @@ namespace Org.Quickstart.IntegrationTests.ControllerTests
 			Assert.Equal(HttpStatusCode.OK, deleteResponse.StatusCode);
 		}
 
-		private Profile GetProfile()
+		private UserProfile GetProfile()
 	    {
-	        return new ProfileCreateRequestCommand(){
+	        return new UserProfileCreateRequestCommand(){
 		        FirstName = "John",
 		        LastName = "Doe",
 		        Email = "john.doe@couchbase.com",
@@ -149,7 +149,7 @@ namespace Org.Quickstart.IntegrationTests.ControllerTests
 		    }.GetProfile(); 
 	    }
 
-	    private void UpdateProfile (Profile profile)
+	    private void UpdateProfile (UserProfile profile)
 	    {
 	        profile.FirstName = "Jane";
 	        profile.LastName = "Smith";
