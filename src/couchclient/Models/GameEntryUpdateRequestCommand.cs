@@ -19,7 +19,7 @@ namespace couchclient.Models
 	        return new GameEntry
             {
                 Pid = this.Pid,
-                __T = "go",
+                __T = "ge",
 		        name = this.name,
                 description = this.description,
                 options = this.options,
