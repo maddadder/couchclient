@@ -78,7 +78,7 @@ namespace couchclient.Controllers
         {
             try
             {
-		        if (!string.IsNullOrEmpty(request.name) && request.description != null)
+		        if (!string.IsNullOrEmpty(request.name) && request.description != null && request.options != null)
 		        {
 		            var bucket = await _bucketProvider.GetBucketAsync(_couchbaseConfig.BucketName);
 		            var collection = bucket.Collection(_couchbaseConfig.CollectionName);
@@ -155,8 +155,8 @@ namespace couchclient.Controllers
 
         [HttpGet]
 	    [Route("List")]
-        [SwaggerOperation(OperationId = "GameEntry-List", Summary = "Search for gameEntrys", Description = "Get a list of gameEntrys from the request")]
-        [SwaggerResponse(200, "Returns the list of gameEntrys")]
+        [SwaggerOperation(OperationId = "GameEntry-List", Summary = "Search for gameEntries", Description = "Get a list of gameEntries from the request")]
+        [SwaggerResponse(200, "Returns the list of gameEntries")]
         [SwaggerResponse(500, "Returns an internal error")]
         [Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<List<GameEntry>>> List([FromQuery] GameEntryListRequestQuery request)

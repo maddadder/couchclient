@@ -13,6 +13,7 @@ namespace couchclient.Models
         public string name { get; set; }
         [Required]
         public List<string> description { get; set; }
+        [Required]
         public List<GameOption> options { get; set; }
         public DateTime Created { get;set; }
         public DateTime Modified { get;set; }
