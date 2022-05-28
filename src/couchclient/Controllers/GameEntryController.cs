@@ -164,7 +164,7 @@ namespace couchclient.Controllers
             try
             {
                 var cluster = await _clusterProvider.GetClusterAsync();
-                var query = $"SELECT p.* FROM `{_couchbaseConfig.BucketName}`.`{_couchbaseConfig.ScopeName}`.`{_couchbaseConfig.CollectionName}` p WHERE __T = 'ge' ORDER BY p.modified ASC LIMIT {request.Limit} OFFSET {request.Skip}";
+                var query = $"SELECT p.* FROM `{_couchbaseConfig.BucketName}`.`{_couchbaseConfig.ScopeName}`.`{_couchbaseConfig.CollectionName}` p WHERE __T = 'ge' ORDER BY p.created ASC LIMIT {request.Limit} OFFSET {request.Skip}";
                 _logger.LogInformation(query);
                 var results = await cluster.QueryAsync<GameEntry>(query);
                 var items = await results.Rows.ToListAsync<GameEntry>();
