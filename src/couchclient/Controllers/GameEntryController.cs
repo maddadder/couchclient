@@ -45,7 +45,6 @@ namespace couchclient.Controllers
         [SwaggerResponse(200, "Returns a report")]
         [SwaggerResponse(404, "Report not found")]
         [SwaggerResponse(500, "Returns an internal error")]
-        [Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<GameEntry>> GetById([FromRoute] Guid id)
         {
             try
@@ -158,7 +157,6 @@ namespace couchclient.Controllers
         [SwaggerOperation(OperationId = "GameEntry-List", Summary = "Search for gameEntries", Description = "Get a list of gameEntries from the request")]
         [SwaggerResponse(200, "Returns the list of gameEntries")]
         [SwaggerResponse(500, "Returns an internal error")]
-        [Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<List<GameEntry>>> List([FromQuery] GameEntryListRequestQuery request)
         {
             try

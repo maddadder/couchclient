@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using couchclient.Models;
 using Swashbuckle.AspNetCore.Annotations;
+using Microsoft.AspNetCore.Authorization;
 
 namespace couchclient.Controllers
 {
@@ -71,6 +72,7 @@ namespace couchclient.Controllers
         [SwaggerResponse(201, "Create a userlink")]
         [SwaggerResponse(409, "the href of the link already exists")]
         [SwaggerResponse(500, "Returns an internal error")]
+        [Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Post([FromBody] UserLinkCreateRequestCommand request)
         {
             try
@@ -105,6 +107,7 @@ namespace couchclient.Controllers
         [SwaggerResponse(200, "Update a userlink")]
         [SwaggerResponse(404, "userlink not found")]
         [SwaggerResponse(500, "Returns an internal error")]
+        [Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Update([FromBody] UserLinkUpdateRequestCommand request)
         {
             try
@@ -133,6 +136,7 @@ namespace couchclient.Controllers
         [SwaggerResponse(200, "Delete a userlink")]
         [SwaggerResponse(404, "userlink not found")]
         [SwaggerResponse(500, "Returns an internal error")]
+        [Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
             try
