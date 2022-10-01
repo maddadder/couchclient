@@ -97,7 +97,7 @@ sudo nano /etc/docker/daemon.json
 # deploy
 cd src/couchclient
 docker-compose build
-docker push 192.168.1.151:32000/couchclient:1.0.106
+docker push 192.168.1.151:32000/couchclient:1.0.109
 cd ../../
 helm upgrade couchclient ./couchclient
 ```
