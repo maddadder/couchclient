@@ -94,10 +94,23 @@ sudo nano /etc/docker/daemon.json
   "insecure-registries" : ["192.168.1.151:32000"]
 }
 
+# to manage kubernetes
+kubectl port-forward -n kube-system service/kubernetes-dashboard 10443:443 --address 0.0.0.0
+
+
+# deploy plhhoa
+cd src/couchclient
+docker-compose build
+docker push 192.168.1.151:32000/couchclient:1.0.110
+cd ../../
+helm upgrade couchclient -f ./couchclient/values.yaml -f ./couchclient/values.plhhoa.yaml ./couchclient
+```
+
+
 # deploy
 cd src/couchclient
 docker-compose build
-docker push 192.168.1.151:32000/couchclient:1.0.109
+docker push 192.168.1.151:32000/couchclient:1.0.110
 cd ../../
-helm upgrade couchclient ./couchclient
+helm upgrade couchclient -f ./couchclient/values.yaml ./couchclient
 ```

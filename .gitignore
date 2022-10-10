@@ -404,3 +404,5 @@ ASALocalRun/
 # Local History for Visual Studio
 .localhistory/
 src/couchclient/appsettings.json
+src/couchclient/appsettings.plhhoa.json
+src/couchclient/appsettings.leenet.json

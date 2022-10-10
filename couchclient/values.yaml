@@ -73,3 +73,5 @@ affinity:
           values:
           - couchclient
       topologyKey: "server"
+
+environment: "leenet"
