@@ -1,1 +1,4 @@
 environment: plhhoa
+
+nameOverride: "plhhoa-couchclient"
+fullnameOverride: "plhhoa-couchclient"

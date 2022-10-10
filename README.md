@@ -101,16 +101,16 @@ kubectl port-forward -n kube-system service/kubernetes-dashboard 10443:443 --add
 # deploy plhhoa
 cd src/couchclient
 docker-compose build
-docker push 192.168.1.151:32000/couchclient:1.0.110
+docker push 192.168.1.151:32000/couchclient:1.0.114
 cd ../../
-helm upgrade couchclient -f ./couchclient/values.yaml -f ./couchclient/values.plhhoa.yaml ./couchclient
+helm upgrade plhhoa-couchclient -f ./couchclient/values.yaml -f ./couchclient/values.plhhoa.yaml ./couchclient
 ```
 
 
 # deploy
 cd src/couchclient
 docker-compose build
-docker push 192.168.1.151:32000/couchclient:1.0.110
+docker push 192.168.1.151:32000/couchclient:1.0.114
 cd ../../
-helm upgrade couchclient -f ./couchclient/values.yaml ./couchclient
+helm upgrade lenet-couchclient -f ./couchclient/values.yaml -f ./couchclient/values.leenet.yaml ./couchclient
 ```

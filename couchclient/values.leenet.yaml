@@ -1,0 +1,4 @@
+environment: leenet
+
+nameOverride: "leenet-couchclient"
+fullnameOverride: "leenet-couchclient"
