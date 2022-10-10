@@ -104,7 +104,7 @@ docker-compose build
 docker push 192.168.1.151:32000/couchclient:1.0.114
 cd ../../
 helm upgrade plhhoa-couchclient -f ./couchclient/values.yaml -f ./couchclient/values.plhhoa.yaml ./couchclient
-```
+
 
 
 # deploy
