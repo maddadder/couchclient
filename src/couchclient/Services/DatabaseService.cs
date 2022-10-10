@@ -75,7 +75,7 @@ namespace couchclient.Services
 					_logger.LogWarning($"try to create scope {_couchbaseConfig.ScopeName}");
 					try
 					{
-						await bucket.Collections.CreateScopeAsync(_couchbaseConfig.CollectionName);
+						await bucket.Collections.CreateScopeAsync(_couchbaseConfig.ScopeName);
 					}
 					catch(ScopeExistsException)
 					{
@@ -84,6 +84,10 @@ namespace couchclient.Services
 					catch (HttpRequestException)
 					{
 						_logger.LogWarning($"HttpRequestExcecption when creating Scope {_couchbaseConfig.ScopeName}");
+					}
+					catch (ArgumentNullException)
+					{
+						_logger.LogWarning($"ArgumentNullException when creating Scope {_couchbaseConfig.ScopeName}");
 					}
 				}
 				

@@ -62,9 +62,9 @@ A fully list of nuget packages are referenced below:
 ```xml
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.4" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.1.4" />
-     <PackageReference Include="CouchbaseNetClient" Version="3.2.5" />
+     <PackageReference Include="CouchbaseNetClient" Version="3.3.6" />
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.2" />
-    <PackageReference Include="Couchbase.Extensions.DependencyInjection" Version="3.2.5" />
+    <PackageReference Include="Couchbase.Extensions.DependencyInjection" Version="3.3.6" />
 ```
 
 ## Conclusion
@@ -101,7 +101,7 @@ kubectl port-forward -n kube-system service/kubernetes-dashboard 10443:443 --add
 # deploy plhhoa
 cd src/couchclient
 docker-compose build
-docker push 192.168.1.151:32000/couchclient:1.0.114
+docker push 192.168.1.151:32000/couchclient:1.0.118
 cd ../../
 helm upgrade plhhoa-couchclient -f ./couchclient/values.yaml -f ./couchclient/values.plhhoa.yaml ./couchclient
 
@@ -110,7 +110,7 @@ helm upgrade plhhoa-couchclient -f ./couchclient/values.yaml -f ./couchclient/va
 # deploy
 cd src/couchclient
 docker-compose build
-docker push 192.168.1.151:32000/couchclient:1.0.114
+docker push 192.168.1.151:32000/couchclient:1.0.118
 cd ../../
 helm upgrade leenet-couchclient -f ./couchclient/values.yaml -f ./couchclient/values.leenet.yaml ./couchclient
 ```
