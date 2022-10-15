@@ -69,7 +69,7 @@ namespace couchclient.Controllers
         }
 
         [HttpPost]
-        [SwaggerOperation(OperationId = "UserMesssage-Post", Summary = "Create a usermessage", Description = "Create a usermessage from the request")]
+        [SwaggerOperation(OperationId = "UserMessage-Post", Summary = "Create a usermessage", Description = "Create a usermessage from the request")]
         [SwaggerResponse(201, "Create a usermessage")]
         [SwaggerResponse(409, "the href of the link already exists")]
         [SwaggerResponse(500, "Returns an internal error")]
