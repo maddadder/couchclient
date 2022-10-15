@@ -15,9 +15,9 @@ namespace couchclient.Models
         [Required]
         public string Password { get; set; }
 
-        public UserProfile GetProfile()
+        public NewUserProfile GetProfile()
         {
-            return new UserProfile
+            return new NewUserProfile
             {
 		        Pid = new Guid(),
                 __T = "up",

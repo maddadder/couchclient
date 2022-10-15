@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace couchclient.Models
 {
-    public class UserProfile
+    public class NewUserProfile
     {
         [Required]
         public Guid Pid { get; set; }
@@ -25,7 +25,7 @@ namespace couchclient.Models
             }
             set
             {
-                _password = value;
+                _password = BCrypt.Net.BCrypt.HashPassword(value);
             }
         }
         public DateTime Created { get;set; }
