@@ -11,7 +11,7 @@ namespace couchclient.Extensions
         public static IEnumerable < Claim > GetClaims(this UserToken userAccounts, Guid Id) {
             IEnumerable<Claim> claims = new Claim[] {
                 new Claim("Id", userAccounts.Id.ToString()),
-                new Claim(ClaimTypes.Email, userAccounts.Email),
+                new Claim(ClaimTypes.Email, userAccounts.PreferredUsername),
                 new Claim(ClaimTypes.NameIdentifier, Id.ToString()),
                 new Claim(ClaimTypes.Expiration, DateTime.UtcNow.AddDays(1).ToString("MMM ddd dd yyyy HH:mm:ss tt"))
             };
@@ -38,7 +38,7 @@ namespace couchclient.Extensions
                     expires: new DateTimeOffset(UserToken.ExpiredTime).DateTime, 
                     signingCredentials: new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256));
                 UserToken.Token = new JwtSecurityTokenHandler().WriteToken(JWToken);
-                UserToken.Email = model.Email;
+                UserToken.PreferredUsername = model.PreferredUsername;
                 UserToken.Id = model.Id;
                 UserToken.GuidId = Id;
                 return UserToken;

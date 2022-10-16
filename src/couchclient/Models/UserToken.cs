@@ -22,7 +22,7 @@ namespace couchclient.Models
             get;
             set;
         }
-        public string Email {
+        public string PreferredUsername {
             get;
             set;
         }

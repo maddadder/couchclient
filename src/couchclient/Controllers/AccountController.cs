@@ -56,12 +56,12 @@ namespace couchclient.Controllers
             var Token = new UserToken();
             var users = await GetAllUsers();
             var user = users.FirstOrDefault(x => 
-                                x.Email.Equals(userLogin.Email, StringComparison.OrdinalIgnoreCase) && 
+                                x.PreferredUsername.Equals(userLogin.PreferredUsername, StringComparison.OrdinalIgnoreCase) && 
                                 BCrypt.Net.BCrypt.Verify(userLogin.Password, x.Password));
             if (user != null) 
             {
                 Token = Extensions.JwtHelpers.GenTokenkey(new UserToken() {
-                    Email = user.Email,
+                    PreferredUsername = user.PreferredUsername,
                     GuidId = Guid.NewGuid(),
                     Id = user.Pid,
                 }, jwtSettings);

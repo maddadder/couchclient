@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 namespace couchclient.Models {
     public class UserLogin {
         [Required]
-        public string Email {
+        public string PreferredUsername {
             get;
             set;
         }

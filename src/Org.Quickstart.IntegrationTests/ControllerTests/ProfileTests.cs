@@ -28,7 +28,7 @@ namespace Org.Quickstart.IntegrationTests.ControllerTests
         public async Task InsertProfileTestAsync()
         {
 	        //create user
-            var userProfile = GetProfile();
+            var userProfile = GetNewProfile();
             var newUser = JsonConvert.SerializeObject(userProfile);
             var content = new StringContent(newUser, Encoding.UTF8, "application/json");
 	        var response = await _client.PostAsync(baseHostname, content);
@@ -40,7 +40,7 @@ namespace Org.Quickstart.IntegrationTests.ControllerTests
 	        //validate creation 
 	        Assert.Equal(userProfile.FirstName, newUserResult.FirstName);  
 	        Assert.Equal(userProfile.LastName, newUserResult.LastName);  
-	        Assert.Equal(userProfile.Email, newUserResult.Email);  
+	        Assert.Equal(userProfile.PreferredUsername, newUserResult.PreferredUsername);  
 
 	        //remove user
 	        var deleteResponse = await _client.DeleteAsync($"{baseHostname}/{newUserResult.Pid}"); 
@@ -51,7 +51,7 @@ namespace Org.Quickstart.IntegrationTests.ControllerTests
         public async Task UpdateProfileTestAsync()
         {
             //create user
-            var userProfile = GetProfile();
+            var userProfile = GetNewProfile();
             var newUser = JsonConvert.SerializeObject(userProfile);
             var content = new StringContent(newUser, Encoding.UTF8, "application/json");
             var response = await _client.PostAsync(baseHostname, content);
@@ -71,7 +71,7 @@ namespace Org.Quickstart.IntegrationTests.ControllerTests
             var updateUserResult = JsonConvert.DeserializeObject<UserProfile>(updateUserJson);
 
 	        //validate update worked
-	        Assert.Equal(newUserResult.Email, updateUserResult.Email);
+	        Assert.Equal(newUserResult.PreferredUsername, updateUserResult.PreferredUsername);
 	        Assert.Equal(newUserResult.FirstName, updateUserResult.FirstName);
 	        Assert.Equal(newUserResult.LastName, updateUserResult.LastName);
 
@@ -85,7 +85,7 @@ namespace Org.Quickstart.IntegrationTests.ControllerTests
         public async Task GetProfileTestAsync()
         {
 			//create user
-			var userProfile = GetProfile();
+			var userProfile = GetNewProfile();
 			var newUser = JsonConvert.SerializeObject(userProfile);
 			var content = new StringContent(newUser, Encoding.UTF8, "application/json");
 			var response = await _client.PostAsync(baseHostname, content);
@@ -101,7 +101,7 @@ namespace Org.Quickstart.IntegrationTests.ControllerTests
 			var getUserResult = JsonConvert.DeserializeObject<UserProfile>(getJsonResult);
 
 			//validate it got the same user
-			Assert.Equal(newUserResult.Email, getUserResult.Email);
+			Assert.Equal(newUserResult.PreferredUsername, getUserResult.PreferredUsername);
 	        Assert.Equal(newUserResult.FirstName, getUserResult.FirstName);
 	        Assert.Equal(newUserResult.LastName, getUserResult.LastName);
 
@@ -114,7 +114,7 @@ namespace Org.Quickstart.IntegrationTests.ControllerTests
 		public async Task GetProfileSearchTestAsync()
 		{
 			//create user
-			var userProfile = GetProfile();
+			var userProfile = GetNewProfile();
 			var newUser = JsonConvert.SerializeObject(userProfile);
 			var content = new StringContent(newUser, Encoding.UTF8, "application/json");
 			var response = await _client.PostAsync(baseHostname, content);
@@ -130,7 +130,7 @@ namespace Org.Quickstart.IntegrationTests.ControllerTests
 			var getUserResult = JsonConvert.DeserializeObject<List<UserProfile>>(getJsonResult);
 
 			//validate it got the same user
-			Assert.Equal(newUserResult.Email, getUserResult[0].Email);
+			Assert.Equal(newUserResult.PreferredUsername, getUserResult[0].PreferredUsername);
 			Assert.Equal(newUserResult.FirstName, getUserResult[0].FirstName);
 			Assert.Equal(newUserResult.LastName, getUserResult[0].LastName);
 
@@ -139,12 +139,12 @@ namespace Org.Quickstart.IntegrationTests.ControllerTests
 			Assert.Equal(HttpStatusCode.OK, deleteResponse.StatusCode);
 		}
 
-		private UserProfile GetProfile()
+		private NewUserProfile GetNewProfile()
 	    {
 	        return new UserProfileCreateRequestCommand(){
 		        FirstName = "John",
 		        LastName = "Doe",
-		        Email = "john.doe@couchbase.com",
+		        PreferredUsername = "john.doe@couchbase.com",
 		        Password = "password"
 		    }.GetProfile(); 
 	    }
@@ -153,7 +153,7 @@ namespace Org.Quickstart.IntegrationTests.ControllerTests
 	    {
 	        profile.FirstName = "Jane";
 	        profile.LastName = "Smith";
-	        profile.Email = "Jane.Smith@couchbase.com";
+	        profile.PreferredUsername = "Jane.Smith@couchbase.com";
 	        profile.Password = "password1";
 	    }
     }

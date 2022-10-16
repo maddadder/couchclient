@@ -71,14 +71,14 @@ namespace couchclient.Controllers
         [HttpPost]
         [SwaggerOperation(OperationId = "UserProfile-Post", Summary = "Create a user profile", Description = "Create a user profile from the request")]
         [SwaggerResponse(201, "Create a user profile")]
-        [SwaggerResponse(409, "the email of the user already exists")]
+        [SwaggerResponse(409, "the PreferredUsername of the user already exists")]
         [SwaggerResponse(500, "Returns an internal error")]
         [Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Post([FromBody] UserProfileCreateRequestCommand request)
         {
             try
             {
-		        if (!string.IsNullOrEmpty(request.Email) && !string.IsNullOrEmpty(request.Password))
+		        if (!string.IsNullOrEmpty(request.PreferredUsername) && !string.IsNullOrEmpty(request.Password))
 		        {
 		            var bucket = await _bucketProvider.GetBucketAsync(_couchbaseConfig.BucketName);
 		            var collection = bucket.Collection(_couchbaseConfig.CollectionName);
@@ -170,7 +170,7 @@ namespace couchclient.Controllers
                     query = $"SELECT p.* FROM `{_couchbaseConfig.BucketName}`.`{_couchbaseConfig.ScopeName}`.`{_couchbaseConfig.CollectionName}` p WHERE __T == 'up' ORDER BY p.firstname ASC, p.lastname ASC LIMIT {request.Limit} OFFSET {request.Skip}";;
                 }
                 else{
-                    query = $"SELECT p.* FROM `{_couchbaseConfig.BucketName}`.`{_couchbaseConfig.ScopeName}`.`{_couchbaseConfig.CollectionName}` p WHERE __T == 'up' AND lower(p.email) = '{request.Search.ToLower()}' LIMIT {request.Limit} OFFSET {request.Skip}";;
+                    query = $"SELECT p.* FROM `{_couchbaseConfig.BucketName}`.`{_couchbaseConfig.ScopeName}`.`{_couchbaseConfig.CollectionName}` p WHERE __T == 'up' AND lower(p.preferredUsername) = '{request.Search.ToLower()}' LIMIT {request.Limit} OFFSET {request.Skip}";;
                 }
                 _logger.LogInformation(query);
                 var results = await cluster.QueryAsync<UserProfile>(query);
