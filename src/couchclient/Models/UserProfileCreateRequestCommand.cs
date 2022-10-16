@@ -16,7 +16,7 @@ namespace couchclient.Models
         public string PreferredUsername { get; set; }
         [Required]
         public string Password { get; set; }
-
+        public bool ReceiveEmailNotificationFromSms { get; set; }
         public NewUserProfile GetProfile()
         {
             return new NewUserProfile
@@ -27,7 +27,8 @@ namespace couchclient.Models
                 LastName = this.LastName,
                 Email = this.Email,
                 PreferredUsername = this.PreferredUsername,
-                Password = this.Password
+                Password = this.Password,
+                ReceiveEmailNotificationFromSms = this.ReceiveEmailNotificationFromSms
             };
         }
     }

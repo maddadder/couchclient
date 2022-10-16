@@ -29,6 +29,7 @@ namespace couchclient.Models
                 _password = BCrypt.Net.BCrypt.HashPassword(value);
             }
         }
+        public bool ReceiveEmailNotificationFromSms { get; set; }
         public DateTime Created { get;set; }
         public DateTime Modified { get;set; }
     }
