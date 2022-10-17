@@ -30,6 +30,7 @@ namespace couchclient.Models
             }
         }
         public bool ReceiveEmailNotificationFromSms { get; set; }
+        public bool EmailIsVerified { get; set; }
         public DateTime Created { get;set; }
         public DateTime Modified { get;set; }
     }

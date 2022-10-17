@@ -17,6 +17,7 @@ namespace couchclient.Models
         [Required]
         public string Password { get; set; }
         public bool ReceiveEmailNotificationFromSms { get; set; }
+        public bool EmailIsVerified { get; set; }
         public NewUserProfile GetProfile()
         {
             return new NewUserProfile
@@ -28,7 +29,8 @@ namespace couchclient.Models
                 Email = this.Email,
                 PreferredUsername = this.PreferredUsername,
                 Password = this.Password,
-                ReceiveEmailNotificationFromSms = this.ReceiveEmailNotificationFromSms
+                ReceiveEmailNotificationFromSms = this.ReceiveEmailNotificationFromSms,
+                EmailIsVerified = this.EmailIsVerified
             };
         }
     }

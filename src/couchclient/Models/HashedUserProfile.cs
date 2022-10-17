@@ -20,6 +20,7 @@ namespace couchclient.Models
         [Required]
         public string Password {get;set;}
         public bool ReceiveEmailNotificationFromSms { get; set; }
+        public bool EmailIsVerified { get; set; }
         public DateTime Created { get;set; }
         public DateTime Modified { get;set; }
     }
