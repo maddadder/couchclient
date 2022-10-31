@@ -2,7 +2,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-replicaCount: 1
+replicaCount: 2
 
 image:
   repository: 192.168.1.151:32000/couchclient
@@ -59,7 +59,8 @@ autoscaling:
   targetCPUUtilizationPercentage: 80
   # targetMemoryUtilizationPercentage: 80
 
-nodeSelector: {}
+nodeSelector:
+  kubernetes.io/role: worker
 
 tolerations: []
 
@@ -72,6 +73,6 @@ affinity:
           operator: In
           values:
           - couchclient
-      topologyKey: "server"
+      topologyKey: "kubernetes.io/hostname"
 
 environment: "example"
