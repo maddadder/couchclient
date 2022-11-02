@@ -64,15 +64,4 @@ nodeSelector:
 
 tolerations: []
 
-affinity:
-  podAntiAffinity:
-    requiredDuringSchedulingIgnoredDuringExecution:
-    - labelSelector:
-        matchExpressions:
-        - key: "app.kubernetes.io/name"
-          operator: In
-          values:
-          - couchclient
-      topologyKey: "kubernetes.io/hostname"
-
 environment: "example"
