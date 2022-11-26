@@ -9,7 +9,7 @@ namespace couchclient.Models
             get;
             set;
         }
-        [JsonConverter(typeof(JsonTimeSpanConverter))]
+        //[JsonConverter(typeof(JsonTimeSpanConverter))]
         public TimeSpan Validaty {
             get;
             set;

@@ -3,7 +3,7 @@ version: '2'
 services:
 
   couchclient:
-      image: 192.168.1.151:32000/couchclient:1.0.129
+      image: neon-registry.4e88-13d3-b83a-9fc9.neoncluster.io/leenet/couchclient:1.0.131
       build:
           context: ./
           dockerfile: ./Dockerfile
